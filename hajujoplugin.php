@@ -2,7 +2,7 @@
 	
 /*
 	Plugin Name: Hajujo Plugin
-	Description: A widget to display set number of posts from the custom post type.
+	Description: A plugin to add a custom post type, add a widget to display set number of posts from the custom post type (Daily Food Specials), 		and to add a shortcode - [hajujoshortcode].
 	Plugin URI: http://www.hajujo.ca
 	Author: Harinder Mundh, Junaid Siddiqui, Joseph Adamu
 	Author URI: http://www.hajujo.ca
@@ -38,6 +38,32 @@ function food_specials_custompost() {
 }
 
 add_action('init', 'food_specials_custompost');
+
+// Creates a function for a shortcode (hajujoshortcode) that will display Hajujo's custom post type posts - Daily Food Specials posts and will also provide a link to the posts if you click any of them.
+
+add_shortcode('hajujoshortcode', 'hajujoshortcode');
+
+function hajujoshortcode(){
+	$args = array(
+		'post_type' => 'food_specials',
+	);
+	
+	$shortcodeposts = '';
+	$query = new WP_Query($args);
+	
+	if($query->have_posts() ) {
+		$shortcodeposts .= '<ul>';
+		while($query->have_posts() ) {
+			$query->the_post();
+			$shortcodeposts .= '<li>' . $image;
+			$shortcodeposts .= '<a href="' . get_permalink() . '">';
+			$shortcodeposts .= get_the_title() . '</a>';	
+		}
+		$shortcodeposts .= '</ul>';
+	}
+	wp_reset_postdata();
+	return $shortcodeposts;
+}
 
 
 // Create the Widget
