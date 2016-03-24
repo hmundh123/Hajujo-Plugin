@@ -11,9 +11,17 @@
 */
 
 
-/**
- * Function for Custom Post Type - Daily Food Specials .
- */
+// Enqueue the plugin style sheet. Strictly for the plugin, when activated.
+
+function plugin_stylesheet() {
+	wp_register_style( 'plugin-style', plugins_url( '/hajujoplugin/style.css'));
+	wp_enqueue_style ( 'plugin-style' );	
+}
+
+add_action( 'wp_enqueue_scripts', 'plugin_stylesheet' );
+
+
+// Function for Custom Post Type - Daily Food Specials .
 
 function food_specials_custompost() {
 	$args = array(
@@ -39,7 +47,7 @@ class HajujoWidget extends WP_Widget {
 	// Initialize the Widget
 	public function __construct() {
 		$widget_ops = array(
-			'classname' => 'widget_archive', 
+			'classname' => 'hajujo_widget_specials_posts', 
 			'description' => __( 'A display of daily posts from a custom post type.', 'hajujo') 
 	);
 		// Adds a class to the widget and provides a description on the Widget page to describe what the widget does.
@@ -97,18 +105,22 @@ class HajujoWidget extends WP_Widget {
 		echo $after_widget;
 	}
 	
+	// Function to pull our custom post type posts (Daily Food Specials) that will show on the sidebar widget
+	
 	public function getSpecialsPosts($numberOfSpecialsPosts) { 
 	
 		global $post;
-		add_image_size( 'hajujo_widget_size', 80, 40, false );
+		add_image_size( 'hajujo_widget_size', 100, 60, false );
 		$specials = new WP_Query();
 		$specials->query('post_type=food_specials & posts_per_page=' . $numberOfSpecialsPosts );
+		
+		// If/Else statement to determine what to display if there are posts, and if there are no posts, it will show "No Specials This Week"
 		
 		if($specials->found_posts > 0) {
 				echo '<ul class="hajujo_widget">';
 			while ($specials->have_posts()) {
 				$specials->the_post();
-				$image = (has_post_thumbnail($post->ID)) ? get_the_post_thumbnail($post->ID, 'hajujo_widget_size') : '<div class="noThumb"></div>';
+				$image = (has_post_thumbnail($post->ID)) ? get_the_post_thumbnail($post->ID, 'hajujo_widget_size') : '<div class="noThumbnailAvail"></div>';
 				$dailyspecial = '<li>' . $image;
 				$dailyspecial .= '<a href="' . get_permalink() . '">';
 				$dailyspecial .= get_the_title() . '</a>';

@@ -1,0 +1,27 @@
+.hajujo_widget {
+	margin-left: -30px;
+}
+
+.noThumbnailAvail {
+	width: 110px;
+	height: 70px;
+	background-color:#7B7676;	
+}
+
+.hajujo_widget li {
+	list-style: none;
+	margin-top: 15px;	
+}
+
+.hajujo_widget li a {
+	margin-left: 2px;
+}
+
+.hajujo_widget li img {
+	margin-left: -20px;	
+	margin-bottom: 5px;
+}
+
+.widget-title {
+	margin-left: 10px;	
+}
